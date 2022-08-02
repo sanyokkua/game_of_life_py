@@ -27,11 +27,11 @@ class GameLife:
         self._number_of_cols: int = number_of_cells
         self._game_field: list[list[GameLifeCell]] = self._init_game_field()
         self._previous_field: list[list[GameLifeCell]] = self._game_field
-        self._game_life_generation: int = 0
+        self._generation: int = 0
         log.info('GameLife is initialized')
         log.debug('GameLife.__init__: rows: %d, col: %d, gen: %d',
                   self._number_of_rows, self._number_of_cols,
-                  self._game_life_generation)
+                  self._generation)
 
     @beartype
     def _init_game_field(self) -> list[list[GameLifeCell]]:
@@ -218,14 +218,14 @@ class GameLife:
             return 0
 
     @property
-    def game_life_generation(self) -> int:
+    def generation(self) -> int:
         """Property Game Life Generation.
 
         Returns:
             int: Number of the Last Generaation
         """
         log.debug('figame_life_generation property access')
-        return self._game_life_generation
+        return self._generation
 
     @property
     def previous_field(self) -> list[list[GameLifeCell]]:
@@ -277,7 +277,7 @@ class GameLife:
                 alive_neighbours: int = self._count_amount_alive_neighbour(
                     cell.row, cell.col)
                 self._apply_rules_and_change_state(cell, alive_neighbours)
-        self._game_life_generation += 1
+        self._generation += 1
 
     @beartype
     def is_the_final_generation(self) -> bool:
@@ -288,5 +288,5 @@ class GameLife:
         Returns:
             bool: _description_
         """
-        return (self._game_life_generation > 0
+        return (self._generation > 0
                 and self._previous_field == self._game_field)

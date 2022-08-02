@@ -1,10 +1,12 @@
 """Module represents Console Version of the Game"""
 
-from gameoflifeapi.core.classes.game_life import GameLife
+from gameoflifeapi.core.api.abstract.definitions import AbstractPersistance
+from gameoflifeapi.core.api.controller import GameLifeController
+from gameoflifeapi.core.api.persistance import GameLifePicklePersistance
+from gameoflifeapi.core.classes.game_enums import GameLifeCellState
 from gameoflifeapi.core.tools.console_tools import print_game_state
 
 import logging
-import random
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -13,41 +15,39 @@ logging.basicConfig(level=logging.INFO,
 def main():
     rows: int = int(input('Type number of the ROWS:\t'))
     cols: int = int(input('Type number of the COLUMNS:\t'))
-    game: GameLife = GameLife(rows, cols)
-    initial_state: list[tuple[int, int]] = []
+
+    game_persistance: AbstractPersistance = GameLifePicklePersistance()
+    game_controller: GameLifeController = GameLifeController(game_persistance)
+    game_controller.start_new_game(rows, cols)
 
     option: str = input(
-        'If you want random state - type rand, or will be manual creation of the initial state:\t')
+        'If you want random state - type rand, or will be manual creation of the initial state: ')
 
     if option == 'rand':
-        number_of_iterations: int = random.randrange(5, rows * cols)
-        while number_of_iterations > 0:
-            random_row = random.randrange(0, rows)
-            random_col: int = random.randrange(0, cols)
-            initial_state.append((random_row, random_col))
-            number_of_iterations -= 1
+        game_controller.make_random_cell_states()
     else:
+        initial_state: list[tuple[int, int]] = []
         while True:
-            print_game_state(game.field)
+            print_game_state(game_controller.game_field)
             print(initial_state)
             print('Type Coordinates:')
-            row: int = int(input('Type ROW:\t'))
-            col: int = int(input('Type COLUMNS:\t'))
+            row: int = int(input('Type ROW: '))
+            col: int = int(input('Type COLUMNS: '))
             initial_state.append((row, col))
             to_exit: str = input(
-                'Type exit to finish creating initial state or just press enter to continue:\t')
+                'Type exit to finish creating initial state or just press enter to continue: ')
             if to_exit == 'exit':
                 break
-            game.create_new_generation()
-    game.set_alive_cells(initial_state)
+        game_controller.edit_current_field_state(initial_state,
+                                                 GameLifeCellState.ALIVE)
 
     while True:
-        print_game_state(game.field)
+        print_game_state(game_controller.game_field)
         to_exit: str = input(
-            'Type exit to finish or just press enter to continue:\t')
+            'Type exit to finish or just press enter to continue: ')
         if to_exit == 'exit':
             break
-        game.create_new_generation()
+        game_controller.increment_generation()
 
 
 main()

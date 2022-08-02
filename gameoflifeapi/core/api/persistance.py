@@ -3,13 +3,14 @@ import pickle
 import logging
 
 from beartype import beartype
+from gameoflifeapi.core.api.abstract.definitions import AbstractPersistance
 from gameoflifeapi.core.classes.game_life import GameLife
 
 log: logging.Logger = logging.getLogger(__name__)
 FILE_SAVE_EXTENSION: str = '.gsave'
 
 
-class GameLifePicklePersistance:
+class GameLifePicklePersistance(AbstractPersistance):
     """Represent functionality of the loading and saving game."""
 
     @beartype

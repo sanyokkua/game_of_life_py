@@ -13,7 +13,7 @@ class TestGameLife(unittest.TestCase):
         self.assertEqual(10, game_life.cols)
         self.assertEqual(10, len(game_life._game_field))
         self.assertEqual(10, len(game_life._game_field[0]))
-        self.assertEqual(0, game_life.game_life_generation)
+        self.assertEqual(0, game_life.generation)
 
         game_life = GameLife(number_of_rows=4, number_of_cells=5)
         self.assertIsNotNone(game_life)
@@ -21,7 +21,7 @@ class TestGameLife(unittest.TestCase):
         self.assertEqual(5, game_life.cols)
         self.assertEqual(4, len(game_life._game_field))
         self.assertEqual(5, len(game_life._game_field[0]))
-        self.assertEqual(0, game_life.game_life_generation)
+        self.assertEqual(0, game_life.generation)
 
     def test_init_game_field(self) -> None:
         game_life = GameLife()
@@ -147,18 +147,18 @@ class TestGameLife(unittest.TestCase):
 
     def test_game_life_generation_property_get(self) -> None:
         game_life = GameLife(3, 4)
-        self.assertEqual(0, game_life.game_life_generation)
+        self.assertEqual(0, game_life.generation)
 
         game_life.create_new_generation()
-        self.assertEqual(1, game_life.game_life_generation)
+        self.assertEqual(1, game_life.generation)
 
         game_life.create_new_generation()
-        self.assertEqual(2, game_life.game_life_generation)
+        self.assertEqual(2, game_life.generation)
 
     def test_game_life_generation_property_set(self) -> None:
         game_life = GameLife(3, 3)
         with self.assertRaises(AttributeError):
-            game_life.game_life_generation = 10
+            game_life.generation = 10
 
     def test_previous_field_property_get(self) -> None:
         game_life = GameLife(3, 3)
@@ -191,11 +191,11 @@ class TestGameLife(unittest.TestCase):
 
     def test_create_new_generation(self) -> None:
         game_life = GameLife(4, 5)
-        self.assertEqual(0, game_life.game_life_generation)
+        self.assertEqual(0, game_life.generation)
 
         game_life.set_alive_cells([(0, 0), (0, 1), (0, 2)])
         game_life.create_new_generation()
-        self.assertEqual(1, game_life.game_life_generation)
+        self.assertEqual(1, game_life.generation)
         self.assertEqual(GameLifeCellState.DEAD, game_life.field[0][0].state)
         self.assertEqual(GameLifeCellState.DEAD, game_life.field[0][1].state)
         self.assertEqual(GameLifeCellState.DEAD, game_life.field[0][2].state)
@@ -211,9 +211,9 @@ class TestGameLife(unittest.TestCase):
         self.assertEqual(GameLifeCellState.ALIVE, game_life.field[1][0].state)
         self.assertEqual(GameLifeCellState.ALIVE, game_life.field[1][1].state)
         self.assertEqual(GameLifeCellState.ALIVE, game_life.field[2][0].state)
-        self.assertEqual(2, game_life.game_life_generation)
+        self.assertEqual(2, game_life.generation)
 
-    def test_is_the_final_generation(self)-> None:
+    def test_is_the_final_generation(self) -> None:
         game_life = GameLife(5, 5)
         game_life.set_alive_cells([(0, 0), (0, 1), (0, 2), (1, 1)])
         game_life.create_new_generation()
