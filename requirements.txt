@@ -3,6 +3,7 @@ astroid==2.11.7
 attrs==22.1.0
 autopep8==1.6.0
 bandit==1.7.4
+beartype==0.10.4
 black==22.6.0
 build==0.8.0
 CacheControl==0.12.11
