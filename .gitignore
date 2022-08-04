@@ -131,3 +131,4 @@ dmypy.json
 .mypy_cache/
 .vscode/
 .DS_Store
+PyQt6-stubs

@@ -33,7 +33,10 @@ class GameLifeController(AbstractController):
             list[list[GameLifeCell]]: Game field
         """
         log.info('game_field')
-        return self._current_game_instance.field
+        if self._current_game_instance:
+            return self._current_game_instance.field
+        else:
+            return None
 
     @property
     def field_rows(self) -> int:
@@ -122,6 +125,17 @@ class GameLifeController(AbstractController):
         else:
             log.debug('edit_current_field_state:set_dead_cells')
             self._current_game_instance.set_dead_cells(fields)
+
+    @beartype
+    def switch_state(self, row: int, col: int) -> GameLifeCellState:
+        if (row not in range(self.field_rows)
+                and col not in range(self.field_columns)):
+            raise Exception('Incorrect coordinates')
+
+        current_state = self.game_field[row][col].state
+        new_state = GameLifeCellState.ALIVE if current_state is GameLifeCellState.DEAD else GameLifeCellState.DEAD
+        self.edit_current_field_state([(row, col)], new_state)
+        return new_state
 
     def increment_generation(self) -> None:
         """Generate new generation."""
