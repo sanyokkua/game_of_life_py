@@ -11,8 +11,7 @@ from gameoflifeapi.logic.data.state import CellState
 
 from .logic.data.dtos import NewGameDataDto
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 
 
 def print_game_state(game_field: Field) -> None:
@@ -37,6 +36,7 @@ def print_game_state(game_field: Field) -> None:
 
 
 def main():
+    """Define entry point for the console game."""
     rows: int = int(input('Type number of the ROWS: '))
     cols: int = int(input('Type number of the COLUMNS: '))
 

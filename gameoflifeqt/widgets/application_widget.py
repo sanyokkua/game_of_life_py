@@ -1,3 +1,4 @@
+"""Definition of the Main Application widget."""
 import logging
 
 from PyQt6.QtWidgets import QApplication
@@ -8,6 +9,7 @@ log: logging.Logger = logging.getLogger(__name__)
 
 
 class GameOfLifeQtApplication(QApplication):
+    """Main Application Widget Class."""
 
     def __init__(self) -> None:
         """Initialize Application."""

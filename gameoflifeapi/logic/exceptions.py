@@ -56,8 +56,8 @@ class GenerationValueException(Exception):
         log.debug('GenerationValueException.__init__')
 
 
-class GameFieldValueException(Exception):
-    """Defines exception raised on incorrect GameField value."""
+class GameIsNotStartedException(Exception):
+    """Defines exception raised on not started game."""
 
     def __init__(self, message: str) -> None:
         """Initialize exception.
@@ -66,4 +66,4 @@ class GameFieldValueException(Exception):
             message (str): Error message
         """
         Exception.__init__(self, message)
-        log.debug('GameFieldValueException.__init__')
+        log.debug('GameIsNotStartedException.__init__')

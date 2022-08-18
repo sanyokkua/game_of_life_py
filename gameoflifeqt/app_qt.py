@@ -1,3 +1,4 @@
+"""Definition of the QT Game entry point."""
 import logging
 
 from gameoflifeqt.widgets.application_widget import GameOfLifeQtApplication

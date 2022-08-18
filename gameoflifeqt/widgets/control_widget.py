@@ -1,3 +1,4 @@
+"""Definition of the main control functionality."""
 import logging
 import sys
 
@@ -44,6 +45,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget.__init__.exit')
 
     def _init_menu(self) -> None:
+        """Initialize menu controls."""
         log.debug('QtGameControlWidget._init_menu')
         menu_bar: QMenuBar = self.menuBar()
         menu_game: QMenu = QMenu('Menu', menu_bar)
@@ -71,6 +73,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._init_menu.exit')
 
     def _init_controls(self) -> None:
+        """Initialize other controls."""
         log.debug('QtGameControlWidget._init_controls')
         self._control_widget_group: QGroupBox = QGroupBox()
 
@@ -101,6 +104,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._init_controls.exit')
 
     def _init_main_layout(self) -> None:
+        """Initialize layout with all controls."""
         log.debug('QtGameControlWidget._init_main_layout')
         main_layout: QVBoxLayout = QVBoxLayout()
         main_layout.addWidget(self.menuBar())
@@ -112,6 +116,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._init_main_layout.exit')
 
     def _stop_timer(self) -> None:
+        """Stop the timer and configure controls related to timer."""
         if self._timer.isActive():
             self._timer.stop()
             self._button_toggle_autoupdate.setDown(False)
@@ -119,6 +124,7 @@ class QtGameControlWidget(QMainWindow):
             self._button_next_gen.setEnabled(True)
 
     def _start_timer(self) -> None:
+        """Start the timer and configure controls related to timer."""
         if not self._timer.isActive():
             self._timer.start()
             self._button_toggle_autoupdate.setDown(True)
@@ -126,6 +132,7 @@ class QtGameControlWidget(QMainWindow):
             self._button_next_gen.setEnabled(False)
 
     def _on_action_new_game(self) -> None:
+        """Process new game menu click."""
         log.debug('QtGameControlWidget._on_action_new_game')
         self._stop_timer()
         dial: QtNewGamePopUpWidget = QtNewGamePopUpWidget()
@@ -142,6 +149,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._on_action_new_game.exit')
 
     def _before_game_start(self, game_data: GameDataDto) -> None:
+        """Process controls sizes before game will start."""
         log.debug('QtGameControlWidget._start_game')
         self._field_widget.clear_field()
         self._button_next_gen.setEnabled(True)
@@ -160,6 +168,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._start_game.exit')
 
     def _on_action_save_game(self) -> None:
+        """Process save game menu click."""
         log.debug('QtGameControlWidget._on_action_save_game')
         self._stop_timer()
 
@@ -168,6 +177,7 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._on_action_save_game.exit')
 
     def _on_action_load_game(self) -> None:
+        """Process load game menu click."""
         log.debug('QtGameControlWidget._on_action_load_game')
         self._stop_timer()
 
@@ -187,17 +197,20 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._on_action_load_game.exit')
 
     def _on_action_exit(self) -> None:
+        """Process exit game menu click."""
         log.debug('QtGameControlWidget._on_action_exit')
         self._stop_timer()
         log.debug('QtGameControlWidget._on_action_exit.exit')
         sys.exit()
 
     def _on_button_next_gen(self) -> None:
+        """Process button next generation click."""
         log.debug('QtGameControlWidget._on_button_next_gen')
         self._controller.increment_generation()
         log.debug('QtGameControlWidget._on_button_next_gen.exit')
 
     def _on_button_toggle_autoupdate(self) -> None:
+        """Process button autoupdate click."""
         log.debug('QtGameControlWidget._on_button_toggle_autoupdate')
         if self._timer.isActive():
             self._stop_timer()
@@ -206,11 +219,13 @@ class QtGameControlWidget(QMainWindow):
         log.debug('QtGameControlWidget._on_button_toggle_autoupdate.exit')
 
     def _on_timer_update(self) -> None:
+        """Process on time tick event."""
         log.debug('QtGameControlWidget._on_auto_update')
         self._on_button_next_gen()
         log.debug('QtGameControlWidget._on_auto_update.exit')
 
     def _on_generation_created(self) -> None:
+        """Process game state change event."""
         log.debug('QtGameControlWidget._on_generation_created')
         self._field_widget.update_view_state()
         self.setWindowTitle(f'Current Generation: {self._controller.game_state.generation}')

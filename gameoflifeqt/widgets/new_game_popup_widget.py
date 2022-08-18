@@ -1,3 +1,4 @@
+"""Represent functionality of the new game popup."""
 import logging
 
 from PyQt6.QtCore import Qt
@@ -9,8 +10,10 @@ log: logging.Logger = logging.getLogger(__name__)
 
 
 class QtNewGamePopUpWidget(QDialog):
+    """Definition of the New Game Popup Dialog."""
 
     def __init__(self) -> None:
+        """Initialize Dialog."""
         QDialog.__init__(self)
         log.debug('QtNewGamePopUpWidget.__init__')
         self._current_row_number: int = 10
@@ -82,16 +85,19 @@ class QtNewGamePopUpWidget(QDialog):
         log.debug('QtNewGamePopUpWidget.__init__.exit')
 
     def _on_spin_box_rows(self) -> None:
+        """Process on ROW value change event."""
         log.debug('QtNewGamePopUpWidget._on_spin_box_rows')
         self._current_row_number = self._spin_box_rows.value()
         log.debug('QtNewGamePopUpWidget._on_spin_box_rows.exit')
 
     def _on_spin_box_columns(self) -> None:
+        """Process on COLUMN value change event."""
         log.debug('QtNewGamePopUpWidget._on_spin_box_columns')
         self._current_col_number = self._spin_box_columns.value()
         log.debug('QtNewGamePopUpWidget._on_spin_box_columns.exit')
 
     def _on_checkbox_random_state(self) -> None:
+        """Process on RANDOM checkbox value change event."""
         log.debug('QtNewGamePopUpWidget._on_checkbox_random_state')
         if self._checkbox_random.isChecked():
             self._randomize_on_start = True
@@ -101,12 +107,15 @@ class QtNewGamePopUpWidget(QDialog):
 
     @property
     def number_of_rows(self) -> int:
+        """Return value of the ROWS property."""
         return self._current_row_number
 
     @property
     def number_of_columns(self) -> int:
+        """Return value of the COLUMNS property."""
         return self._current_col_number
 
     @property
     def randomize_on_start(self) -> bool:
+        """Return value of the RANDOMIZE_ON_START property."""
         return self._randomize_on_start

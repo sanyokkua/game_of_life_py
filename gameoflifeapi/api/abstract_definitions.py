@@ -101,9 +101,5 @@ class AbstractController(ABC):
         pass
 
     @abstractmethod
-    def is_finished(self) -> bool:
-        pass
-
-    @abstractmethod
     def randomize_cells_state(self) -> None:
         pass

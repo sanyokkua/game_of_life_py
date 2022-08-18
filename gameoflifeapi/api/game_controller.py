@@ -1,3 +1,4 @@
+"""Definition of the main controller of the game."""
 import logging
 from typing import Callable
 
@@ -102,17 +103,6 @@ class GameLifeController(AbstractController):
         """Generate new generation."""
         log.debug('increment_generation')
         self._game_flow.create_next_generation()
-
-    def is_finished(self) -> bool:
-        """Check if the game is finished.
-
-        Checks if the current generation is the final
-
-        Returns:
-            bool: True if the final generation
-        """
-        log.debug('is_finished')
-        return False  # TODO:
 
     def randomize_cells_state(self) -> None:
         """Set cells state by random values."""

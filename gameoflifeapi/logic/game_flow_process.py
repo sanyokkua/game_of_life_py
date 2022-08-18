@@ -1,6 +1,5 @@
 """Defines Game Flow Process API."""
 import logging
-import math
 import random
 from typing import Callable
 
@@ -78,6 +77,10 @@ class GameFlowProcess:
             current_cell.state = CellState.DEAD
         else:
             current_cell.state = CellState.ALIVE
+        # Recalculate neighbour number in cells around current
+        neighbours = self._get_neighbour_cells(row, column)
+        for cell in neighbours.values():
+            self._count_neighbours_for_cell(cell)
 
     def create_next_generation(self) -> None:
         """Create next generation of the field."""
@@ -99,32 +102,52 @@ class GameFlowProcess:
             self._count_neighbours_for_cell(cell)
         self._on_generation_created()
 
-    def _count_neighbours_for_cell(self, cell: Cell) -> None:
+    def _count_neighbours_for_cell(self, current_cell: Cell) -> None:
         """Count the number of alive cells around passed cell.
 
         Args:
             cell (FieldCell): _description_
+        """
+        neighbours = self._get_neighbour_cells(current_cell.row, current_cell.column)
+        count: int = 0
+        for neighbour_cell in neighbours.values():
+            if neighbour_cell.state is CellState.ALIVE:
+                count += 1
+        current_cell.neighbours = count
+
+    def _get_neighbour_cells(self, row: int, column: int) -> dict[tuple[int, int], Cell]:
+        """Find and collect all neighbours for the cell by coordinates.
+
+        ( 0 0 ) ( 0 1 ) ( 0 2 )    ( -1 -1 ) ( -1 +0 ) ( -1 +1 )
+        ( 1 0 ) ( 1 1 ) ( 1 2 ) -> ( +0 -1 ) (  1  1 ) ( +0 +1 )
+        ( 2 0 ) ( 2 1 ) ( 2 2 )    ( +1 -1 ) ( +1 +0 ) ( +1 +1 )
+        Args:
+            row (int): row number
+            column (int): column number
+
+        Returns:
+            dict[tuple[int, int], Cell]: dictionary of the cells
         """
         coordinates_diff: set = {
             (-1, -1), (-1, 0), (-1, 1),
             (0, -1), (0, 1),
             (1, -1), (1, 0), (1, 1)
         }
-        row: int = cell.row
-        col: int = cell.column
-        count: int = 0
+        result_dictionary: dict[tuple[int, int], Cell] = {}
         for row_diff, col_diff in coordinates_diff:
-            to_visit_row: int = row + row_diff
-            to_visit_col: int = col + col_diff
-            is_not_valid_row: bool = to_visit_row < 0 or to_visit_col > self.game_field.rows
-            is_not_valid_col: bool = to_visit_col < 0 or to_visit_col > self.game_field.columns
-            if is_not_valid_row or is_not_valid_col:
-                continue
+            neighbour_row: int = row + row_diff
+            neighbour_col: int = column + col_diff
+            is_not_valid_row: bool = ((neighbour_row < 0)
+                                      or (neighbour_row >= self.game_field.rows))
+            is_not_valid_col: bool = ((neighbour_col < 0)
+                                      or (neighbour_col >= self.game_field.columns))
+            is_current_cell: bool = neighbour_row == row and neighbour_col == column
+            if is_not_valid_row or is_not_valid_col or is_current_cell:
+                continue  # Filter coordinates that are out of bounds
             try:
                 cells: dict[tuple[int, int], Cell] = self._game_field.all_cells
-                neighbour_cell: Cell = cells[(to_visit_row, to_visit_col)]
-                if neighbour_cell.state is CellState.ALIVE:
-                    count += 1
+                neighbour_cell: Cell = cells[(neighbour_row, neighbour_col)]
+                result_dictionary[(neighbour_row, neighbour_col)] = neighbour_cell
             except KeyError as err:
                 log.debug('Coordinate is not valid, %s', err)
-        cell.neighbours = count
+        return result_dictionary

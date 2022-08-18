@@ -118,3 +118,7 @@ class Cell:
         if value is None or not 0 <= value <= 8:
             raise NeighboursNumberException('Number is not in 0..8')
         self._neighbours = value
+
+    def __repr__(self) -> str:
+        """Return new repr value for the class."""
+        return f'({self.row},{self.column}):N={self.neighbours}:ST={self.state}'
