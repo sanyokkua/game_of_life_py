@@ -3,6 +3,10 @@ name = "game_of_life_py"
 version = "0.1.0"
 description = "Implementation of the Conway's Game of Life on the PyQt6"
 authors = ["Oleksandr Kostenko <sanyokkua@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+packages = [{ include = "gameoflifeapi" }, { include = "gameoflifeqt" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -33,3 +37,7 @@ pep8 = "1.7.1"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+gameoflifeconsole = 'gameoflifeapi.app:main'
+gameoflifeqt = 'gameoflifeqt.app_qt:start_game'

@@ -14,5 +14,3 @@ def start_game() -> None:
     app: GameOfLifeQtApplication = GameOfLifeQtApplication()
     app.exec()
 
-
-start_game()
