@@ -60,8 +60,17 @@ class QtGameControlWidget(QMainWindow):
         action_load_game.triggered.connect(self._on_action_load_game)
         action_exit.triggered.connect(self._on_action_exit)
 
+        action_new_game.setShortcut('Ctrl+N')
+        action_new_game.setStatusTip('Start new Game')
+
         action_save_game.setShortcut('Ctrl+S')
         action_save_game.setStatusTip('Save Game to File')
+
+        action_load_game.setShortcut('Ctrl+L')
+        action_load_game.setStatusTip('Load Game from File')
+
+        action_exit.setShortcut('Ctrl+Q')
+        action_exit.setStatusTip('Exit Game')
 
         menu_game.addActions([
             action_new_game,
@@ -146,6 +155,9 @@ class QtGameControlWidget(QMainWindow):
             )
             self._before_game_start(new_game)
             self._controller.start_new_game(new_game)
+            if not dial.randomize_on_start:
+                self._field_widget.update_view_state()
+                self.setWindowTitle(f'Current Generation: {self._controller.game_state.generation}')
         log.debug('QtGameControlWidget._on_action_new_game.exit')
 
     def _before_game_start(self, game_data: GameDataDto) -> None:

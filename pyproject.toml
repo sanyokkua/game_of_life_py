@@ -9,10 +9,11 @@ readme = "README.md"
 packages = [{ include = "gameoflifeapi" }, { include = "gameoflifeqt" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.11"
 PyQt6 = "6.3.1"
 PyQt6-Qt6 = "6.3.1"
 PyQt6-sip = "13.4.0"
+pyinstaller = "^5.3"
 
 
 [tool.poetry.dev-dependencies]
@@ -33,6 +34,8 @@ isort = "5.10.1"
 mypy = "0.971"
 mypy-extensions = "0.4.3"
 pep8 = "1.7.1"
+pyinstaller = "5.3"
+#--onefile --windowed crossgame/main.py
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

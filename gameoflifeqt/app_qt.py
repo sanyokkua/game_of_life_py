@@ -14,3 +14,6 @@ def start_game() -> None:
     app: GameOfLifeQtApplication = GameOfLifeQtApplication()
     app.exec()
 
+
+if __name__ == '__main__':
+    start_game()

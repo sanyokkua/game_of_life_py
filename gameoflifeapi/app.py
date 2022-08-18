@@ -53,3 +53,7 @@ def main():
         if to_exit == 'exit':
             break
         game_controller.increment_generation()
+
+
+if __name__ == '__main__':
+    main()
