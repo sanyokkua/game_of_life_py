@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (QFileDialog, QGridLayout, QGroupBox, QMainWindow,
 from gameoflifeapi.api.game_controller import GameLifeController
 from gameoflifeapi.api.persistance import GamePicklePersistance
 from gameoflifeapi.logic.data.dtos import GameDataDto, NewGameDataDto
-from gameoflifeqt.widgets.field_widget import QtGameFieldWidget
+from gameoflifeqt.widgets.field.field_widget import QtGameFieldWidget
 from gameoflifeqt.widgets.new_game_popup_widget import QtNewGamePopUpWidget
 
 log: logging.Logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class QtGameControlWidget(QMainWindow):
         self._controller: GameLifeController = GameLifeController(
             self._game_persistence,
             self._on_generation_created)
-        self._field_widget = QtGameFieldWidget(self._controller)
+        self._field_widget = QtGameFieldWidget(self, self._controller)
 
         self._timer: QTimer = QTimer(self)
         self._timer.setInterval(300)
@@ -84,12 +84,13 @@ class QtGameControlWidget(QMainWindow):
     def _init_controls(self) -> None:
         """Initialize other controls."""
         log.debug('QtGameControlWidget._init_controls')
-        self._control_widget_group: QGroupBox = QGroupBox()
+        self._control_widget_container = QWidget(self)
+        self._control_widget_group: QGroupBox = QGroupBox(self._control_widget_container)
 
         self._button_next_gen: QPushButton = QPushButton(
-            'Generate new Generation')
+            'Generate new Generation', self._control_widget_container)
         self._button_toggle_autoupdate: QPushButton = QPushButton(
-            TEXT_AUTO_UPDATE_UP)
+            TEXT_AUTO_UPDATE_UP, self._control_widget_container)
 
         self._button_next_gen.setEnabled(False)
         self._button_toggle_autoupdate.setEnabled(False)
@@ -103,7 +104,7 @@ class QtGameControlWidget(QMainWindow):
         self._button_toggle_autoupdate.setSizePolicy(QSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
-        grid_layout_group: QGridLayout = QGridLayout()
+        grid_layout_group: QGridLayout = QGridLayout(self._control_widget_container)
         grid_layout_group.addWidget(self._button_next_gen, 0, 0)
         grid_layout_group.addWidget(self._button_toggle_autoupdate, 0, 1)
 
@@ -115,11 +116,13 @@ class QtGameControlWidget(QMainWindow):
     def _init_main_layout(self) -> None:
         """Initialize layout with all controls."""
         log.debug('QtGameControlWidget._init_main_layout')
-        main_layout: QVBoxLayout = QVBoxLayout()
+        main_widget: QWidget = QWidget(self)
+        main_layout: QVBoxLayout = QVBoxLayout(main_widget)
+
         main_layout.addWidget(self.menuBar())
         main_layout.addWidget(self._control_widget_group)
         main_layout.addWidget(self._field_widget)
-        main_widget: QWidget = QWidget()
+
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
         log.debug('QtGameControlWidget._init_main_layout.exit')
